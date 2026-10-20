@@ -5,6 +5,8 @@
 
 Стек: JavaScript (ES6+), Three.js, WebGL. 
 
+GitHub Pages: https://ekatherinas.github.io/interactive-mall-map-prototype/
+
 ## Архитектура
 
 ## Инструкция по запуску
