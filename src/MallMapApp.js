@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { DataGenerator } from "./DataGenerator";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { FloorGenerator } from "./FloorGenerator";
+import { GridStrategy } from "./ArrangeStrategy";
 
 export class MallMapApp {
 	constructor() {
@@ -19,6 +21,13 @@ export class MallMapApp {
 
 		this.dataGenerator = new DataGenerator();
 		const data = this.dataGenerator.generate(100);
+
+		const arrangeStrategy = new GridStrategy();
+		const floorGenerator = new FloorGenerator();
+		floorGenerator.setArrangeStrategy(arrangeStrategy);
+
+		const floor = floorGenerator.generate(data);
+		this.scene.add(floor.view3D);
 	}
 
 	animate() {
@@ -49,7 +58,7 @@ export class MallMapApp {
 
 	setupCamera(canvas) {
 		const camera = new THREE.PerspectiveCamera();
-		camera.position.set(2, 5, 4);
+		camera.position.set(0, 30, 20);
 		camera.aspect = canvas.clientWidth / canvas.clientHeight;
 		camera.fov = 60;
 		camera.updateProjectionMatrix();
@@ -62,14 +71,7 @@ export class MallMapApp {
 
 	setupScene() {
 		const scene = new THREE.Scene();
-		const geometry = new THREE.BoxGeometry(1, 1, 1);
-		const material = new THREE.MeshPhongMaterial({
-			color: 0x00ff00,
-			emissive: 0xffff00,
-			emissiveIntensity: 0.1,
-		});
-		const cube = new THREE.Mesh(geometry, material);
-		scene.add(cube);
+		scene.background = new THREE.Color(0xfff4de);
 		return scene;
 	}
 }

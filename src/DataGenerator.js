@@ -12,7 +12,7 @@ export class DataGenerator {
 			const name = "shop" + i;
 			const width = Math.random() * this.maxWidth;
 			const depth = Math.random() * this.maxDepth;
-			const color = [Math.random(), Math.random(), Math.random()];
+			const color = { r: Math.random(), g: Math.random(), b: Math.random() };
 			placesData.push(new Place(id, name, width, depth, color));
 		}
 
