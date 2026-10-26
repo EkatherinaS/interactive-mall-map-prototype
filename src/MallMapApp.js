@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { DataGenerator } from "./DataGenerator";
-import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { FloorGenerator } from "./FloorGenerator";
+import { InputController } from "./InputController";
 import { GridStrategy } from "./ArrangeStrategy";
+import { FloorGenerator } from "./FloorGenerator";
+import { ViewModeController } from "./ViewModeController";
 
 export class MallMapApp {
 	constructor() {
@@ -11,13 +12,17 @@ export class MallMapApp {
 			throw new Error("Canvas elemen not found");
 		}
 
-		this.renderer = this.setupRenderer(this.canvas, window.devicePixelRatio);
-		this.camera = this.setupCamera(this.canvas);
-		this.controls = this.setupControls(this.camera, this.renderer);
+		this.renderer = this.setupRenderer();
 		this.scene = this.setupScene();
 
 		this.renderer.setAnimationLoop(() => this.animate());
 		window.addEventListener("resize", () => this.onResize());
+
+		this.viewModeController = new ViewModeController(this.renderer);
+		this.inputController = new InputController(this.viewModeController);
+		this.viewModeController.updateCameraAspect(
+			this.canvas.clientWidth / this.canvas.clientHeight,
+		);
 
 		this.dataGenerator = new DataGenerator();
 		const data = this.dataGenerator.generate(100);
@@ -31,13 +36,14 @@ export class MallMapApp {
 	}
 
 	animate() {
-		this.controls.update();
-		this.renderer.render(this.scene, this.camera);
+		this.viewModeController.updateControls();
+		this.renderer.render(this.scene, this.viewModeController.getCamera());
 	}
 
 	onResize() {
-		this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
-		this.camera.updateProjectionMatrix();
+		this.viewModeController.updateCameraAspect(
+			this.canvas.clientWidth / this.canvas.clientHeight,
+		);
 		this.renderer.setSize(
 			this.canvas.clientWidth,
 			this.canvas.clientHeight,
@@ -45,28 +51,15 @@ export class MallMapApp {
 		);
 	}
 
-	setupRenderer(canvas, dpr) {
+	setupRenderer() {
 		const renderer = new THREE.WebGLRenderer({
-			canvas: canvas,
+			canvas: this.canvas,
 			antialias: true,
 		});
-		renderer.setPixelRatio(dpr);
-		renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight, false);
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		return renderer;
-	}
-
-	setupCamera(canvas) {
-		const camera = new THREE.PerspectiveCamera();
-		camera.position.set(0, 30, 20);
-		camera.aspect = canvas.clientWidth / canvas.clientHeight;
-		camera.fov = 60;
-		camera.updateProjectionMatrix();
-		return camera;
-	}
-
-	setupControls(camera, renderer) {
-		return new OrbitControls(camera, renderer.domElement);
 	}
 
 	setupScene() {
