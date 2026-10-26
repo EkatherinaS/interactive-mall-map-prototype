@@ -4,6 +4,8 @@ import { InputController } from "./InputController";
 import { GridStrategy } from "./ArrangeStrategy";
 import { FloorGenerator } from "./FloorGenerator";
 import { ViewModeController } from "./ViewModeController";
+import { LabelSpriteFactory, LabelTroikaFactory } from "./LabelFactory";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export class MallMapApp {
 	constructor() {
@@ -12,8 +14,9 @@ export class MallMapApp {
 			throw new Error("Canvas elemen not found");
 		}
 
-		this.renderer = this.setupRenderer();
+		this.renderer = this.setupRenderer(this.canvas);
 		this.scene = this.setupScene();
+		this.stats = this.setupStats();
 
 		this.renderer.setAnimationLoop(() => this.animate());
 		window.addEventListener("resize", () => this.onResize());
@@ -28,8 +31,10 @@ export class MallMapApp {
 		const data = this.dataGenerator.generate(100);
 
 		const arrangeStrategy = new GridStrategy();
+		const labelFactory = new LabelTroikaFactory();
 		const floorGenerator = new FloorGenerator();
 		floorGenerator.setArrangeStrategy(arrangeStrategy);
+		floorGenerator.setLabelFactory(labelFactory);
 
 		const floor = floorGenerator.generate(data);
 		this.scene.add(floor.view3D);
@@ -38,6 +43,7 @@ export class MallMapApp {
 	animate() {
 		this.viewModeController.updateControls();
 		this.renderer.render(this.scene, this.viewModeController.getCamera());
+		this.stats.update();
 	}
 
 	onResize() {
@@ -51,13 +57,13 @@ export class MallMapApp {
 		);
 	}
 
-	setupRenderer() {
+	setupRenderer(canvas) {
 		const renderer = new THREE.WebGLRenderer({
-			canvas: this.canvas,
+			canvas: canvas,
 			antialias: true,
 		});
 		renderer.setPixelRatio(window.devicePixelRatio);
-		renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight, false);
+		renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		return renderer;
 	}
@@ -66,5 +72,11 @@ export class MallMapApp {
 		const scene = new THREE.Scene();
 		scene.background = new THREE.Color(0xfff4de);
 		return scene;
+	}
+
+	setupStats() {
+		const stats = Stats();
+		document.body.appendChild(stats.dom);
+		return stats;
 	}
 }

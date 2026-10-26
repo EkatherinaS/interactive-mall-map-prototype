@@ -9,7 +9,9 @@
     "dependencies": {
         "three": "0.186.1",
 		"tweakpane": "4.0.5",
-        "@tweenjs/tween.js": "25.0.0"
+        "@tweenjs/tween.js": "25.0.0",
+        "troika-three-text": "0.52.5",
+        "three-spritetext": "1.10.0"
     },
     "devDependencies": {
         "rollup": "4.64.12",
