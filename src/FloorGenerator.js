@@ -2,10 +2,12 @@ import * as THREE from "three";
 import { PlaceView } from "./PlaceView";
 import { LineStrategy } from "./ArrangeStrategy";
 import { Floor } from "./Floor";
+import { LabelTroikaFactory } from "./LabelFactory";
 
 export class FloorGenerator {
 	#arrangeStrategy = new LineStrategy();
-	#labelFactory;
+	#labelFactory = new LabelTroikaFactory();
+	#height = 2;
 
 	generate(places) {
 		const floor = new Floor();
@@ -13,12 +15,24 @@ export class FloorGenerator {
 
 		for (const place of places) {
 			const position = positions.get(place.id);
+			const label = this.#labelFactory.getLabel(place.name);
 
-			const geometry = new THREE.BoxGeometry(place.width, 2, place.depth);
+			const geometry = new THREE.BoxGeometry(
+				place.width,
+				this.#height,
+				place.depth,
+			);
 			const material = new THREE.MeshBasicMaterial();
 			material.color.setRGB(place.color.r, place.color.g, place.color.b);
 
-			const placeView = new PlaceView(place.id, geometry, material, position);
+			const placeView = new PlaceView(
+				place.id,
+				geometry,
+				material,
+				position,
+				label,
+			);
+
 			floor.width = Math.max(floor.width, position.x + place.width);
 			floor.depth = Math.max(floor.depth, position.z + place.depth);
 			floor.addPlace(placeView);
@@ -28,6 +42,7 @@ export class FloorGenerator {
 
 	setLabelFactory(labelFactory) {
 		this.#labelFactory = labelFactory;
+		this.#labelFactory.moveUp(this.#height / 2 + 0.1);
 	}
 
 	setArrangeStrategy(arrangeStrategy) {
