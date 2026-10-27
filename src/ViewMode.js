@@ -74,7 +74,7 @@ export class Mode3D extends ViewMode {
 	setupCamera() {
 		this.camera = new THREE.PerspectiveCamera();
 		this.camera.fov = 60;
-		this.camera.position.set(0, this.frustumSize / Math.sqrt(3), 0);
+		this.camera.position.set(0, this.frustumSize * Math.sqrt(3), 0);
 		this.camera.updateProjectionMatrix();
 	}
 
