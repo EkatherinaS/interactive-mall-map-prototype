@@ -27,17 +27,17 @@ export class MallMapApp {
 			this.canvas.clientWidth / this.canvas.clientHeight,
 		);
 
-		this.dataGenerator = new DataGenerator();
-		const data = this.dataGenerator.generate(100);
+		const dataGenerator = new DataGenerator();
+		const data = dataGenerator.generate(100);
 
 		const arrangeStrategy = new GridStrategy();
-		const labelFactory = new LabelTroikaFactory();
+		const labelFactory = new LabelSpriteFactory();
 		const floorGenerator = new FloorGenerator();
 		floorGenerator.setArrangeStrategy(arrangeStrategy);
 		floorGenerator.setLabelFactory(labelFactory);
 
-		const floor = floorGenerator.generate(data);
-		this.scene.add(floor.view3D);
+		this.floor = floorGenerator.generate(data);
+		this.scene.add(this.floor.view3D);
 	}
 
 	animate() {
