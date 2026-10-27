@@ -5,9 +5,16 @@ import { Floor } from "./Floor";
 import { LabelTroikaFactory } from "./LabelFactory";
 
 export class FloorGenerator {
-	#arrangeStrategy = new LineStrategy();
-	#labelFactory = new LabelTroikaFactory();
-	#height = 2;
+	#arrangeStrategy;
+	#labelFactory;
+	#height;
+
+	constructor() {
+		this.#height = 2;
+		this.#arrangeStrategy = new LineStrategy();
+		this.#labelFactory = new LabelTroikaFactory();
+		this.#labelFactory.moveY(this.#height / 2 + 0.1);
+	}
 
 	generate(places) {
 		const floor = new Floor();
@@ -42,10 +49,14 @@ export class FloorGenerator {
 
 	setLabelFactory(labelFactory) {
 		this.#labelFactory = labelFactory;
-		this.#labelFactory.moveUp(this.#height / 2 + 0.1);
+		this.#labelFactory.moveY(this.#height / 2 + 0.1);
 	}
 
 	setArrangeStrategy(arrangeStrategy) {
 		this.#arrangeStrategy = arrangeStrategy;
+	}
+
+	setHeight(height) {
+		this.#height = height;
 	}
 }

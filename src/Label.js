@@ -1,7 +1,9 @@
 import { Text } from "troika-three-text";
 import SpriteText from "three-spritetext";
 
-export class Label {}
+export class Label {
+	setPosition(x, y, z) {}
+}
 
 export class LabelTroika extends Label {
 	constructor(text) {

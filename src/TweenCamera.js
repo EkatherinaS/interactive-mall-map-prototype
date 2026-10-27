@@ -42,11 +42,11 @@ export class TweenCamera {
 		const viewHeightFrom =
 			(cameraFrom.top - cameraFrom.bottom) / cameraFrom.zoom;
 		const viewHeightTo =
-			Math.sin(this.#rad(cameraTo.fov / 2)) * cameraTo.position.y * 2;
+			Math.tan(this.#rad(cameraTo.fov / 2)) * cameraTo.position.y * 2;
 		this.viewHeight = { value: viewHeightFrom };
 
 		const maxY = this.camera.far;
-		const minFov = this.#rad(Math.asin(this.viewHeight / (2 * maxY))) * 2;
+		const minFov = this.#rad(Math.atan(this.viewHeight / (2 * maxY))) * 2;
 
 		this.camera.fov = minFov;
 		this.camera.position.set(
@@ -74,7 +74,7 @@ export class TweenCamera {
 	fromPerspectiveToOrthographic(cameraFrom, cameraTo) {
 		const viewHeightTo = (cameraTo.top - cameraTo.bottom) / cameraTo.zoom;
 		const viewHeightFrom =
-			Math.sin(this.#rad(cameraFrom.fov / 2)) * cameraFrom.position.y * 2;
+			Math.tan(this.#rad(cameraFrom.fov / 2)) * cameraFrom.position.y * 2;
 
 		this.viewHeight = { value: viewHeightFrom };
 
@@ -109,7 +109,7 @@ export class TweenCamera {
 		const posY = this.camera.position.y;
 		const vh = this.viewHeight.value;
 
-		this.camera.fov = this.#deg(Math.asin(vh / (2 * posY))) * 2;
+		this.camera.fov = this.#deg(Math.atan(vh / (2 * posY))) * 2;
 		this.camera.lookAt(this.target);
 		this.camera.updateProjectionMatrix();
 	}
