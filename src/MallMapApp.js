@@ -6,6 +6,7 @@ import { FloorGenerator } from "./FloorGenerator";
 import { ViewModeController } from "./ViewModeController";
 import { LabelSpriteFactory, LabelTroikaFactory } from "./LabelFactory";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import { InteractionController } from "./InteractionController";
 
 export class MallMapApp {
 	constructor() {
@@ -21,12 +22,6 @@ export class MallMapApp {
 		this.renderer.setAnimationLoop(() => this.animate());
 		window.addEventListener("resize", () => this.onResize());
 
-		this.viewModeController = new ViewModeController(this.renderer);
-		this.inputController = new InputController(this.viewModeController);
-		this.viewModeController.updateCameraAspect(
-			this.canvas.clientWidth / this.canvas.clientHeight,
-		);
-
 		const dataGenerator = new DataGenerator();
 		const data = dataGenerator.generate(100);
 
@@ -38,10 +33,24 @@ export class MallMapApp {
 
 		this.floor = floorGenerator.generate(data);
 		this.scene.add(this.floor.view3D);
+
+		this.viewModeController = new ViewModeController(this.renderer);
+		this.interactionController = new InteractionController(
+			this.floor.placeViews.map((view) => view.mesh),
+			this.viewModeController,
+		);
+		this.inputController = new InputController(
+			this.viewModeController,
+			this.interactionController,
+		);
+		this.viewModeController.updateCameraAspect(
+			this.canvas.clientWidth / this.canvas.clientHeight,
+		);
 	}
 
 	animate() {
 		this.viewModeController.updateControls();
+		this.interactionController.updateHover();
 		this.renderer.render(this.scene, this.viewModeController.getCamera());
 		this.stats.update();
 	}

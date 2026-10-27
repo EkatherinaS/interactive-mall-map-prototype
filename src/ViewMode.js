@@ -31,6 +31,14 @@ class ViewMode {
 
 	updateControls() {
 		this.controls.update();
+
+		if (this.controls.target.y < 0) {
+			this.controls.target.y = 0;
+		}
+
+		if (this.camera.position.y < 0) {
+			this.camera.position.y = 0;
+		}
 	}
 }
 

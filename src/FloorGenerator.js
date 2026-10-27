@@ -24,21 +24,7 @@ export class FloorGenerator {
 			const position = positions.get(place.id);
 			const label = this.#labelFactory.getLabel(place.name);
 
-			const geometry = new THREE.BoxGeometry(
-				place.width,
-				this.#height,
-				place.depth,
-			);
-			const material = new THREE.MeshBasicMaterial();
-			material.color.setRGB(place.color.r, place.color.g, place.color.b);
-
-			const placeView = new PlaceView(
-				place.id,
-				geometry,
-				material,
-				position,
-				label,
-			);
+			const placeView = new PlaceView(place, position, label, this.#height);
 
 			floor.width = Math.max(floor.width, position.x + place.width);
 			floor.depth = Math.max(floor.depth, position.z + place.depth);
