@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { PlaceView } from "./PlaceView";
+import { PlaceView } from "../PlaceView";
 import { LineStrategy } from "./ArrangeStrategy";
-import { Floor } from "./Floor";
-import { LabelTroikaFactory } from "./LabelFactory";
+import { Floor } from "../Floor";
+import { LabelTroikaFactory } from "../LabelGeneration/LabelFactory";
 
 export class FloorGenerator {
 	#arrangeStrategy;

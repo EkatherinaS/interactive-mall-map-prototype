@@ -1,12 +1,15 @@
 import * as THREE from "three";
 import { DataGenerator } from "./DataGenerator";
 import { InputController } from "./InputController";
-import { GridStrategy } from "./ArrangeStrategy";
-import { FloorGenerator } from "./FloorGenerator";
-import { ViewModeController } from "./ViewModeController";
-import { LabelSpriteFactory, LabelTroikaFactory } from "./LabelFactory";
+import { GridStrategy } from "./FloorGeneration/ArrangeStrategy";
+import { FloorGenerator } from "./FloorGeneration/FloorGenerator";
+import { ViewModeController } from "./ViewMode/ViewModeController";
+import {
+	LabelSpriteFactory,
+	LabelTroikaFactory,
+} from "./LabelGeneration/LabelFactory";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { InteractionController } from "./InteractionController";
+import { InteractionController } from "./VisualState/InteractionController";
 
 export class MallMapApp {
 	constructor() {
