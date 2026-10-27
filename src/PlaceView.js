@@ -1,21 +1,44 @@
 import * as THREE from "three";
+import { DefaultStrategy } from "./VisualStateStrategy";
 
 export class PlaceView {
 	view3D = new THREE.Group();
+	#defaultVisualStateStrategy = new DefaultStrategy();
 
-	constructor(id, geometry, material, position, label) {
-		this.id = id;
+	constructor(place, position, label, height) {
+		this.place = place;
 		this.label = label;
-		this.position = position;
 
-		this.geometry = geometry;
-		this.material = material;
-		const mesh = new THREE.Mesh(this.geometry, this.material);
+		const geometry = new THREE.BoxGeometry(place.width, height, place.depth);
+		const material = new THREE.MeshBasicMaterial();
+		material.color.setHSL(place.color.h, place.color.s, place.color.l);
 
-		this.view3D.add(mesh);
+		this.mesh = new THREE.Mesh(geometry, material);
+		this.mesh.userData.placeView = this;
+
+		const edges = new THREE.EdgesGeometry(geometry);
+		const lineMaterial = new THREE.LineBasicMaterial({
+			color: 0xffa11f,
+		});
+
+		this.outlineMesh = new THREE.LineSegments(edges, lineMaterial);
+		this.outlineMesh.visible = false;
+
+		this.view3D.add(this.mesh);
+		this.view3D.add(this.outlineMesh);
 		this.view3D.add(this.label.view3D);
-		this.view3D.position.copy(this.position);
+		this.view3D.position.copy(position);
+
+		this.visualStateStrategy = this.#defaultVisualStateStrategy;
 	}
 
-	setVisualStateStrategy(strategy) {}
+	setVisualStateStrategy(strategy) {
+		this.visualStateStrategy = strategy;
+		this.visualStateStrategy.apply(this);
+	}
+
+	resetStrategy() {
+		this.visualStateStrategy = this.#defaultVisualStateStrategy;
+		this.visualStateStrategy.apply(this);
+	}
 }

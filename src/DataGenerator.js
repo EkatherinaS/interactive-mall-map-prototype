@@ -16,7 +16,13 @@ export class DataGenerator {
 				this.minWidth + Math.random() * (this.maxWidth - this.minWidth);
 			const depth =
 				this.minDepth + Math.random() * (this.maxDepth - this.minDepth);
-			const color = { r: Math.random(), g: Math.random(), b: Math.random() };
+
+			const color = {
+				h: Math.random() * 360,
+				s: 0.8,
+				l: 0.6,
+			};
+
 			placesData.push(new Place(id, name, width, depth, color));
 		}
 
