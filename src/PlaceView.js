@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DefaultStrategy } from "./VisualStateStrategy";
+import { DefaultStrategy } from "./VisualState/VisualStateStrategy";
 
 export class PlaceView {
 	view3D = new THREE.Group();
