@@ -31,7 +31,7 @@ export class MallMapApp {
 		const data = dataGenerator.generate(100);
 
 		const arrangeStrategy = new GridStrategy();
-		const labelFactory = new LabelTroikaFactory();
+		const labelFactory = new LabelSpriteFactory();
 		const floorGenerator = new FloorGenerator();
 		floorGenerator.setArrangeStrategy(arrangeStrategy);
 		floorGenerator.setLabelFactory(labelFactory);
